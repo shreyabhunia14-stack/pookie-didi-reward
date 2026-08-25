@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pookie Didi — Core Team Treat</title>
+<style>
+:root{--pink:#f7d9e8;--rose:#d96c9b;--purple:#8d6aa8;--ink:#3d3140;--cream:#fffafc}
+*{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:linear-gradient(145deg,#fff7fb,#f4eafb);min-height:100vh}
+.wrap{max-width:760px;margin:auto;padding:28px 18px 50px}.card{background:rgba(255,255,255,.86);border:1px solid #ead9e7;border-radius:28px;box-shadow:0 18px 55px rgba(90,50,90,.12);padding:28px;margin-bottom:18px}
+.brand{text-align:center;font-weight:800;letter-spacing:.12em;font-size:13px;color:var(--purple)}h1{text-align:center;font-size:34px;line-height:1.1;margin:14px 0 8px}p{text-align:center;line-height:1.65;color:#675a68}
+.sub{text-align:center;font-size:15px}.scratch-wrap{display:flex;justify-content:center;margin:25px 0}.scratch{position:relative;width:min(100%,500px);height:250px;border-radius:24px;overflow:hidden;background:linear-gradient(135deg,#fff,#f8e5ef);border:1px solid #edd5e4}
+#reveal{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:20px}
+.amount{font-size:62px;font-weight:900;color:var(--rose);line-height:1}.reward{font-size:18px;font-weight:800;margin-top:8px}.hint{font-size:13px;color:#806e80;margin-top:10px}
+#canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair}
+button{border:0;border-radius:999px;padding:14px 22px;background:var(--purple);color:white;font-weight:800;font-size:15px;cursor:pointer;box-shadow:0 8px 20px rgba(141,106,168,.25)}
+.cta{text-align:center;margin:8px 0 4px}.note{text-align:center;font-size:12px;color:#8a7b89}
+h2{font-size:20px;margin:0 0 14px}.steps{display:grid;gap:12px}.step{display:flex;gap:12px;align-items:flex-start}.num{min-width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--pink);font-weight:900;color:#7d4f6b}
+ul{padding-left:20px;line-height:1.8;color:#675a68}.footer{text-align:center;font-size:12px;color:#8a7b89;margin-top:22px}
+.hidden{display:none}
+@media(max-width:520px){h1{font-size:29px}.card{padding:22px}.scratch{height:225px}.amount{font-size:54px}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<section class="card">
+  <div class="brand">POOKIE DIDI 💜</div>
+  <h1>A Little Treat For You</h1>
+  <p class="sub">For everything you do for the Core Team.<br>Now it's your turn to get a little treat. ✨</p>
+
+  <div class="scratch-wrap">
+    <div class="scratch" id="scratchBox">
+      <div id="reveal">
+        <div class="amount">₹100</div>
+        <div class="reward">CORE TEAM FOOD TREAT 🎉</div>
+        <div class="hint">You unlocked a treat! Scroll down to see how to claim it.</div>
+      </div>
+      <canvas id="canvas"></canvas>
+    </div>
+  </div>
+  <p class="note" id="status">Scratch the card with your finger or mouse 👆</p>
+</section>
+
+<section class="card">
+  <h2>How to claim your ₹100 🍕</h2>
+  <div class="steps">
+    <div class="step"><div class="num">1</div><div>Buy any food or drink <strong>up to ₹100</strong> during the validity period.</div></div>
+    <div class="step"><div class="num">2</div><div>Keep the <strong>original computer-generated/digital bill</strong>.</div></div>
+    <div class="step"><div class="num">3</div><div>Submit the bill through the <strong>Claim My Reward</strong> button below.</div></div>
+    <div class="step"><div class="num">4</div><div>The Founder will verify the bill and reimburse the eligible amount to your bank account.</div></div>
+  </div>
+  <div class="cta"><button onclick="claim()">CLAIM MY ₹100 →</button></div>
+  <p class="note">Replace the button link in the code with your Google Form link.</p>
+</section>
+
+<section class="card">
+  <h2>Terms & Conditions</h2>
+  <ul>
+    <li>Maximum reimbursement is <strong>₹100 per Core Member</strong>.</li>
+    <li>If your eligible bill is below ₹100, reimbursement will be for the bill amount only.</li>
+    <li>Food and beverage purchases only.</li>
+    <li>Original computer-generated/digital bill is required.</li>
+    <li>Handwritten bills will not be accepted.</li>
+    <li>One member can claim this reward once.</li>
+    <li>Valid until: <strong>31 August 2026</strong> — edit this date if needed.</li>
+    <li>The Founder reserves the right to verify the bill before reimbursement.</li>
+  </ul>
+</section>
+
+<div class="footer">Made with a little love for the Pookie Didi Core Team 💜</div>
+</main>
+
+<script>
+const canvas=document.getElementById('canvas'), ctx=canvas.getContext('2d');
+let drawing=false, revealed=false, lastX=0,lastY=0;
+
+function resize(){
+  const r=canvas.getBoundingClientRect(), dpr=window.devicePixelRatio||1;
+  canvas.width=r.width*dpr; canvas.height=r.height*dpr;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.globalCompositeOperation='source-over';
+  const g=ctx.createLinearGradient(0,0,r.width,r.height);
+  g.addColorStop(0,'#c7b7ca');g.addColorStop(.5,'#eee7ef');g.addColorStop(1,'#ad9eb2');
+  ctx.fillStyle=g;ctx.fillRect(0,0,r.width,r.height);
+  ctx.fillStyle='#67556d';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.font='800 20px system-ui';ctx.fillText('SCRATCH ME ✨',r.width/2,r.height/2);
+}
+function pos(e){const r=canvas.getBoundingClientRect();const t=e.touches?e.touches[0]:e;return{x:t.clientX-r.left,y:t.clientY-r.top}}
+function start(e){if(revealed)return;e.preventDefault();drawing=true;const p=pos(e);lastX=p.x;lastY=p.y}
+function move(e){
+ if(!drawing||revealed)return;e.preventDefault();const p=pos(e);
+ ctx.globalCompositeOperation='destination-out';ctx.lineWidth=42;ctx.lineCap='round';ctx.lineJoin='round';
+ ctx.beginPath();ctx.moveTo(lastX,lastY);ctx.lineTo(p.x,p.y);ctx.stroke();lastX=p.x;lastY=p.y;check();
+}
+function stop(){drawing=false}
+function check(){
+ const r=canvas.getBoundingClientRect(); const data=ctx.getImageData(0,0,canvas.width,canvas.height).data;
+ let clear=0,total=0; for(let i=3;i<data.length;i+=4){total++;if(data[i]<80)clear++}
+ if(clear/total>.55) revealAll();
+}
+function revealAll(){
+ revealed=true; canvas.style.display='none'; document.getElementById('status').textContent='🎉 You unlocked ₹100! Scroll down for the claim instructions.';
+}
+canvas.addEventListener('mousedown',start);canvas.addEventListener('mousemove',move);window.addEventListener('mouseup',stop);
+canvas.addEventListener('touchstart',start,{passive:false});canvas.addEventListener('touchmove',move,{passive:false});canvas.addEventListener('touchend',stop);
+window.addEventListener('resize',resize);resize();
+
+function claim(){
+  // CHANGE THIS URL to your Google Form / claim form.
+  window.open('https://forms.google.com/','_blank');
+}
+</script>
+</body>
+</html>
