@@ -1547,6 +1547,7 @@ ul{
 ========================= -->
 
 <script>
+  document.body.style.overflow = "hidden";
 
 
 /* =========================
@@ -1557,17 +1558,18 @@ function openSurprise(){
 
   createConfetti();
 
-  const opening=document.getElementById("opening");
+  const opening = document.getElementById("opening");
 
-  opening.classList.add("opening-hide");
+  // Hide the opening screen
+  opening.style.display = "none";
 
-  setTimeout(function(){
+  // Unlock the main website
+  document.body.style.overflow = "auto";
 
-    opening.style.display="none";
+  // Start the actual website from the very top
+  window.scrollTo(0, 0);
 
-  },800);
-
-}
+  }
 
 
 
