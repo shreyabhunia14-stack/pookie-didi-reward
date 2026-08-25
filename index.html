@@ -19,9 +19,132 @@ h2{font-size:20px;margin:0 0 14px}.steps{display:grid;gap:12px}.step{display:fle
 ul{padding-left:20px;line-height:1.8;color:#675a68}.footer{text-align:center;font-size:12px;color:#8a7b89;margin-top:22px}
 .hidden{display:none}
 @media(max-width:520px){h1{font-size:29px}.card{padding:22px}.scratch{height:225px}.amount{font-size:54px}}
+  /* OPENING SURPRISE */
+
+#opening{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:25px;
+  background:linear-gradient(145deg,#fff7fb,#f4eafb);
+  transition:opacity .8s ease, visibility .8s ease;
+}
+
+.opening-content{
+  max-width:520px;
+  animation:openingIn 1s ease;
+}
+
+.opening-brand{
+  font-weight:800;
+  letter-spacing:.12em;
+  font-size:13px;
+  color:var(--purple);
+}
+
+.opening-content h1{
+  font-size:36px;
+  line-height:1.2;
+  margin:18px 0 8px;
+}
+
+.opening-content p{
+  font-size:16px;
+  margin-bottom:24px;
+}
+
+.opening-content button{
+  border:0;
+  border-radius:999px;
+  padding:14px 24px;
+  background:var(--purple);
+  color:white;
+  font-weight:800;
+  font-size:15px;
+  cursor:pointer;
+  box-shadow:0 8px 20px rgba(141,106,168,.25);
+}
+
+.opening-content button:hover{
+  transform:translateY(-2px);
+}
+
+.opening-hide{
+  opacity:0;
+  visibility:hidden;
+}
+
+@keyframes openingIn{
+  from{
+    opacity:0;
+    transform:translateY(15px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* PARTY POPPER */
+
+.confetti{
+  position:fixed;
+  top:-20px;
+  width:9px;
+  height:14px;
+  z-index:10000;
+  pointer-events:none;
+  animation:confettiFall 3.5s linear forwards;
+}
+
+@keyframes confettiFall{
+  0%{
+    transform:translateY(-20px) rotate(0deg);
+    opacity:1;
+  }
+
+  100%{
+    transform:translateY(110vh) rotate(720deg);
+    opacity:0;
+  }
+}
+
+@media(max-width:520px){
+  .opening-content h1{
+    font-size:29px;
+  }
+}
 </style>
 </head>
 <body>
+
+<!-- OPENING SURPRISE -->
+<div id="opening">
+  <div class="opening-content">
+    <div class="opening-brand">POOKIE DIDI 💜</div>
+
+    <h1>
+      One whole year of chaos,<br>
+      counselling, creativity<br>
+      & core-team madness.
+    </h1>
+
+    <p>
+      We made you a tiny surprise… ✨
+    </p>
+
+    <button onclick="openSurprise()">
+      OPEN YOUR TREAT →
+    </button>
+  </div>
+</div>
+
+<div id="confetti-container"></div>
+
 <main class="wrap">
 <section class="card">
   <div class="brand">POOKIE DIDI 💜</div>
@@ -71,6 +194,67 @@ ul{padding-left:20px;line-height:1.8;color:#675a68}.footer{text-align:center;fon
 </main>
 
 <script>
+  <script>
+
+function openSurprise(){
+
+  createConfetti();
+
+  const opening=document.getElementById("opening");
+
+  opening.classList.add("opening-hide");
+
+  setTimeout(function(){
+    opening.style.display="none";
+  },800);
+
+}
+
+
+function createConfetti(){
+
+  const container=document.getElementById("confetti-container");
+
+  const colors=[
+    "#d96c9b",
+    "#8d6aa8",
+    "#f7d9e8",
+    "#c7b7ca",
+    "#f4b6d2"
+  ];
+
+  for(let i=0;i<90;i++){
+
+    const piece=document.createElement("div");
+
+    piece.className="confetti";
+
+    piece.style.left=Math.random()*100+"vw";
+
+    piece.style.background=
+      colors[Math.floor(Math.random()*colors.length)];
+
+    piece.style.animationDuration=
+      (2.5+Math.random()*2)+"s";
+
+    piece.style.animationDelay=
+      Math.random()*0.3+"s";
+
+    piece.style.transform=
+      "rotate("+Math.random()*360+"deg)";
+
+    container.appendChild(piece);
+
+    setTimeout(function(){
+      piece.remove();
+    },5000);
+
+  }
+
+}
+
+
+const canvas=document.getElementById('canvas'), ctx=canvas.getContext('2d');
 const canvas=document.getElementById('canvas'), ctx=canvas.getContext('2d');
 let drawing=false, revealed=false, lastX=0,lastY=0;
 
